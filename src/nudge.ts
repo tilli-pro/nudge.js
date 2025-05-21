@@ -58,7 +58,7 @@ async function createFileBuffer(file: File): Promise<string> {
   }
 }
 
-async function sendNudge(
+export async function sendNudge(
   client: NudgeClient,
   opts: NudgeSendOpts
 ) {

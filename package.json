@@ -2,13 +2,19 @@
   "name": "nudge.js",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "dist/index.js",
+  "type":"module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
   },
-  "keywords": [],
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": ["transactional email", "email", "sms", "whatsapp", "push notification", "nudge"],
   "author": "Ibrahim Saberi",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^22.15.21",
     "typescript": "^5.8.3"
