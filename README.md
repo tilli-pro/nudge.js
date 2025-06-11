@@ -50,7 +50,10 @@ sendClient.send({
   files: [ // OPTIONAL
     new File(["test_document_text"], "test_document.txt", { type: "text/plain" }),
   ],
-})
+});
+// => Promise<NudgeSendResult>
+// { success: true; error: undefined }
+// { success: false; error: { HasErrors: boolean; Code: number; Error: string; } }
 ```
 
 That's it. Your nudge has been sent.
