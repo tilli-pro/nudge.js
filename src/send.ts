@@ -1,54 +1,29 @@
-import { BASE_PROD_URL } from "./config";
+import type { ClientCreationOpts } from "./client";
 
-interface ClientCreationOpts {
-  apiKey: string;
-  baseUrl?: string;
-}
-
-interface NudgeSendClient {
-  send(opts: NudgeSendOpts): Promise<
-    | { success: boolean; error?: undefined }
-    | { success: false, error: unknown }
-  >;
-}
-
-interface NudgeClient extends NudgeSendClient {
-  
-}
-
-export function createSendClient({
-  baseUrl = BASE_PROD_URL,
-  apiKey
-}: ClientCreationOpts): NudgeSendClient {
-  if(typeof fetch !== "function") {
-    throw new Error("fetch must exist to use nudge.js.");
-  }
-  
-  const client: NudgeSendClient = {
-    send: async (opts: NudgeSendOpts) => {
-      return sendNudge({ baseUrl, apiKey }, opts);
-    }
-  }
-  
-  return client;
-}
-
-interface EmailRecipient {
-  email: string;
-  name?: string;
-}
-
-interface MergeTag {
-  tagName: string;
-  tagValue: string;
-}
-
-interface NudgeSendOpts {
+export interface NudgeSendOpts {
   nudgeId: string;
   recipient: EmailRecipient;
   options?: { cc?: string[]; bcc?: string[] };
   mergeTags?: MergeTag[] | Record<string, string>;
   files?: File[];
+}
+
+export type NudgeSendResult =
+  | { success: boolean; error?: undefined }
+  | { success: false; error: unknown };
+
+export interface NudgeSendClient {
+  send(opts: NudgeSendOpts): Promise<NudgeSendResult>;
+}
+
+export interface EmailRecipient {
+  email: string;
+  name?: string;
+}
+
+export interface MergeTag {
+  tagName: string;
+  tagValue: string;
 }
 
 async function createFileBuffer(file: File): Promise<string> {
@@ -64,9 +39,9 @@ async function createFileBuffer(file: File): Promise<string> {
 }
 
 export async function sendNudge(
-  client: ClientCreationOpts,
+  client: SendClientCreationOpts,
   opts: NudgeSendOpts
-) {
+): Promise<NudgeSendResult> {
   const _mergeTags = opts.mergeTags ?? [];
   const mergeTags = Array.isArray(_mergeTags) ? _mergeTags : Object.entries(_mergeTags).map(([tagName, tagValue]) => ({ tagName, tagValue }));
   
@@ -81,7 +56,7 @@ export async function sendNudge(
     emailAttachments.push(...(await Promise.all(filePromises)));
   }
   
-  const result = await fetch(`${client.baseUrl ?? BASE_PROD_URL}/v2/Nudge/Send`, {
+  const result = await fetch(`${client.baseUrl}/Nudge/Send`, {
     method: "POST",
     headers: {
       accept: "application/json",
@@ -109,4 +84,23 @@ export async function sendNudge(
     return { success: false, error: response.error };
   }
   return { success: true };
+}
+
+type SendClientCreationOpts = Omit<ClientCreationOpts, "authCredentials">;
+
+export function createSendClient({
+  baseUrl = "https://app.nudge.net/api/v2",
+  apiKey
+}: SendClientCreationOpts): NudgeSendClient {
+  if(typeof fetch !== "function") {
+    throw new Error("fetch must exist to use nudge.js.");
+  }
+  
+  const client: NudgeSendClient = {
+    send: async (opts: NudgeSendOpts) => {
+      return sendNudge({ baseUrl, apiKey }, opts);
+    }
+  }
+  
+  return client;
 }
