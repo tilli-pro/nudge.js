@@ -18,7 +18,7 @@ To use the nudge.js SDK you need either [an API key](https://help.nudge.net/arti
 In either case, getting started is the same:
 
 ```ts
-import { createSendClient, createClient } from "nudge.js";
+import { createSendClient, createClient } from "@tilli-pro/nudge.js";
 
 const apiKey = ""; // get this from the nudge dashboard
 const sendClient = createSendClient({ apiKey });
