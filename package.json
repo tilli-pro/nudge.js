@@ -1,5 +1,5 @@
 {
-  "name": "nudge.js",
+  "name": "@tilli-pro/nudge.js",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
