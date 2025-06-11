@@ -35,7 +35,7 @@ The clients can be used immediately for sending real-time nudges:
 
 ```ts
 sendClient.send({
-  nudgeId: "1234" // you can get this from the nudge dashboard,
+  nudgeId: "1234", // you can get this from the nudge dashboard
   recipient: {
     email: "ibrahims@tilli.pro",
     name: "Ibrahim Ali", // OPTIONAL
