@@ -108,13 +108,22 @@ export function createClient({
     if (!connectionPromise && !bearerToken) {
       connectionPromise = $connect();
     }
-    const result = await connectionPromise;
     
-    if (!bearerToken || !result) {
-      throw new Error("Not connected to Nudge API.");
+    if(connectionPromise) {
+      const result = await connectionPromise;
+      if (!bearerToken || !result) {
+        throw new Error("Not connected to Nudge API.");
+      }
     }
     
-    return fn(...args);
+    try {
+      return fn(...args);
+    } catch(e) {
+      if(e instanceof Error && e.message.includes("Unauthorized")) {
+        bearerToken = null;
+      }
+      throw e;
+    }
   }
   
   console.warn("The Nudge API client is currently undergoing active development. The vast majority of API features are not yet implemented. Please use with caution and report any issues you encounter.");
