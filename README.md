@@ -41,8 +41,8 @@ sendClient.send({
     name: "Ibrahim Ali", // OPTIONAL
   },
   options: { // OPTIONAL
-    cc: ["michaelv@tilli.pro"] // OPTIONAL
-    bcc: ["avdhoots@tilli.pro"] // OPTIONAL
+    cc: ["michaelv@tilli.pro"], // OPTIONAL
+    bcc: ["avdhoots@tilli.pro"], // OPTIONAL
   },
   mergeTags: { // OPTIONAL
     productName: "tilliX",
