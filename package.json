@@ -1,36 +1,52 @@
 {
-  "name": "@tilli-pro/nudge.js",
+  "name": "@tilli.dev/nudge.js",
   "version": "0.1.0",
-  "description": "",
-  "main": "dist/index.js",
-  "type":"module",
+  "description": "TypeScript client for the Nudge API: send by template, delivery stats and recipient preferences",
+  "keywords": ["nudge", "email", "sms", "transactional email"],
+  "license": "MIT",
+  "author": "Ibrahim Saberi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tilli-pro/nudge.js.git"
+  },
+  "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": {
-      "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   },
-  "files": [
-    "dist",
-    "package.json"
-  ],
+  "files": ["dist", "README.md", "LICENSE", "CHANGELOG.md"],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "scripts": {
-    "build": "tsc"
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "test": "vitest run",
+    "test:live": "vitest run --config vitest.live.config.ts",
+    "pack:smoke": "bash scripts/pack-smoke.sh",
+    "record-fixtures": "tsx scripts/record-fixtures.ts",
+    "version-packages": "changeset version",
+    "release": "pnpm build && changeset publish",
+    "prepare": "lefthook install"
   },
-  "keywords": [
-    "transactional email",
-    "email",
-    "sms",
-    "whatsapp",
-    "push notification",
-    "nudge"
-  ],
-  "private": false,
-  "author": "Ibrahim Saberi",
-  "license": "MIT",
   "devDependencies": {
-    "@types/node": "^22.15.21",
-    "typescript": "^5.8.3"
+    "@biomejs/biome": "2.5.6",
+    "@changesets/cli": "2.31.1",
+    "@tilli-pro/biome": "0.10.0",
+    "@types/node": "22.18.0",
+    "lefthook": "2.1.14",
+    "tsx": "4.23.13",
+    "typescript": "6.0.3",
+    "vitest": "4.1.11"
   }
 }
