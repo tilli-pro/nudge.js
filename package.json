@@ -1,6 +1,6 @@
 {
   "name": "@tilli.dev/nudge.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "TypeScript client for the Nudge API: send by template, delivery stats and recipient preferences",
   "keywords": ["nudge", "email", "sms", "transactional email"],
   "license": "MIT",
