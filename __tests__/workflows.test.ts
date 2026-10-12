@@ -99,3 +99,89 @@ describe("scripts/pack-smoke.sh", () => {
     expect(statSync(path).mode & 0o100).not.toBe(0);
   });
 });
+
+function atLeast(
+  found: readonly number[],
+  minimum: readonly number[],
+): boolean {
+  for (const [index, wanted] of minimum.entries()) {
+    const have = found[index] ?? 0;
+    if (have !== wanted) {
+      return have > wanted;
+    }
+  }
+  return true;
+}
+
+describe("release.yml", () => {
+  it("runs on pushes to main only", () => {
+    const text = workflow("release.yml");
+    expect(text).toMatch(/^on:\n {2}push:\n {4}branches: \[main\]\n/m);
+    expect(text).not.toMatch(/pull_request|workflow_dispatch|schedule:/);
+  });
+
+  it("runs only in tilli-pro/nudge.js", () => {
+    expect(workflow("release.yml")).toMatch(
+      /^ {4}if: github\.repository == 'tilli-pro\/nudge\.js'$/m,
+    );
+  });
+
+  it("may mint an OIDC token for trusted publishing", () => {
+    const text = workflow("release.yml");
+    expect(text).toMatch(/^permissions:\n(?: {2}.+\n)* {2}id-token: write$/m);
+    expect(text).toMatch(/^ {2}contents: write$/m);
+    expect(text).toMatch(/^ {2}pull-requests: write$/m);
+  });
+
+  it("installs npm 11.5.1 or later on Node 22 with the npm registry", () => {
+    const text = workflow("release.yml");
+    expect(text).toMatch(/^ {10}node-version: "22"$/m);
+    expect(text).toMatch(
+      /^ {10}registry-url: "https:\/\/registry\.npmjs\.org"$/m,
+    );
+    const install = /^ {6}- run: npm install -g npm@(\d+)\.(\d+)\.(\d+)$/m.exec(
+      text,
+    );
+    expect(install).not.toBeNull();
+    const version = install === null ? [] : install.slice(1).map(Number);
+    expect(atLeast(version, [11, 5, 1])).toBe(true);
+    const action = text.indexOf("uses: changesets/action@v1");
+    expect(text.indexOf("npm install -g")).toBeLessThan(action);
+    expect(text.indexOf("pnpm install --frozen-lockfile")).toBeLessThan(action);
+  });
+
+  it("versions and publishes through changesets scripts that exist", () => {
+    const text = workflow("release.yml");
+    expect(text).toContain("uses: changesets/action@v1");
+    const commands = [
+      ...text.matchAll(/^ +(version|publish): pnpm (\S+)$/gm),
+    ].map((match) => match[2] ?? "");
+    expect(commands).toEqual(["version-packages", "release"]);
+    for (const command of commands) {
+      expect(Object.keys(scripts), command).toContain(command);
+    }
+  });
+
+  it("uses no npm token and no cache", () => {
+    const text = workflow("release.yml");
+    expect(text).not.toMatch(/NPM_TOKEN|NODE_AUTH_TOKEN/);
+    expect(text).not.toMatch(/\bcache:/);
+  });
+});
+
+describe("pending changesets", () => {
+  it("each names this package with a semver bump and a summary", () => {
+    const directory = resolve(ROOT, ".changeset");
+    const files = readdirSync(directory).filter(
+      (name) => name.endsWith(".md") && name !== "README.md",
+    );
+    for (const name of files) {
+      const text = readFileSync(resolve(directory, name), "utf8");
+      const front = /^---\n"([^"]+)": (\w+)\n---\n/.exec(text);
+      expect(front, name).not.toBeNull();
+      expect(front?.[1], name).toBe("@tilli.dev/nudge.js");
+      expect(["patch", "minor", "major"], name).toContain(front?.[2]);
+      expect(text.slice(front?.[0].length ?? 0).trim(), name).not.toBe("");
+    }
+  });
+});
