@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/PublicApi/V2/NudgeController.cs:356-358",
+  "request": { "method": "POST", "path": "v2/Nudge/Send", "body": { "nudgeExternalRef": "fixture-ref", "channel": 0, "toEmailAddress": "recipient-1@example.com", "mergeTags": [{ "tagName": "fixtureTag", "tagValue": "fixture value" }, { "tagName": "FIXTURETAG", "tagValue": "fixture value" }] } },
+  "response": { "status": 400, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "HasErrors": true, "Code": 400, "Error": "Merge tag names should not be repeated" } }
+}

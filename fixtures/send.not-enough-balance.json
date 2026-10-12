@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Common/ApiResponse.cs:285 (CreateError defaults to code 500); Nudge.BusinessLayer/RealTimeSmsService.cs",
+  "request": { "method": "POST", "path": "v2/Nudge/Send", "body": { "nudgeExternalRef": "fixture-ref", "channel": 1, "toPhoneNumber": "+15550100001", "mergeTags": [{ "tagName": "fixtureTag", "tagValue": "fixture value" }] } },
+  "response": { "status": 500, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "HasErrors": true, "Code": 500, "Error": "Not Enough Balance" } }
+}

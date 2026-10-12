@@ -1,106 +1,62 @@
-import type { ClientCreationOpts } from "./client";
+import {
+  CHANNEL_CODE,
+  type NudgeChannel,
+  readString,
+  toWireTags,
+} from "./wire.js";
+import type { NudgeRequestSpec } from "./classify.js";
 
-export interface NudgeSendOpts {
-  nudgeId: string;
-  recipient: EmailRecipient;
-  options?: { cc?: string[]; bcc?: string[] };
-  mergeTags?: MergeTag[] | Record<string, string>;
-  files?: File[];
+export type NudgeRecipient =
+  | { readonly email: string }
+  | { readonly phone: string };
+
+export interface SendByTemplateInput {
+  /** Nudge's NudgeExternalRef, resolved per channel. */
+  readonly externalRef: string;
+  readonly channel: NudgeChannel;
+  /** The email for "email", the phone for "sms". */
+  readonly to: NudgeRecipient;
+  /** Tag names without %. */
+  readonly mergeTags: Readonly<Record<string, string>>;
+  /** 1 to 200 characters; maps to IdempotencyKey. */
+  readonly idempotencyKey?: string;
+  /**
+   * Maps to RecipientId; Nudge stores it on the log and keys its per-recipient
+   * rate limit by it (else the address).
+   */
+  readonly recipientId?: string;
 }
 
-export type NudgeSendResult =
-  | { success: boolean; error?: undefined }
-  | { success: false; error: unknown };
-
-export interface NudgeSendClient {
-  send(opts: NudgeSendOpts): Promise<NudgeSendResult>;
+export interface SendResult {
+  readonly accepted: true;
+  readonly notificationLogId: string | null;
 }
 
-export interface EmailRecipient {
-  email: string;
-  name?: string;
+function addressOf(input: SendByTemplateInput): Record<string, unknown> {
+  const to = input.to as { readonly email?: string; readonly phone?: string };
+  return input.channel === "email"
+    ? { toEmailAddress: to.email }
+    : { toPhoneNumber: to.phone };
 }
 
-export interface MergeTag {
-  tagName: string;
-  tagValue: string;
+export function sendRequest(input: SendByTemplateInput): NudgeRequestSpec {
+  const body: Record<string, unknown> = {
+    nudgeExternalRef: input.externalRef,
+    channel: CHANNEL_CODE[input.channel],
+    ...addressOf(input),
+    mergeTags: toWireTags(input.mergeTags),
+  };
+  if (input.idempotencyKey !== undefined) {
+    body.idempotencyKey = input.idempotencyKey;
+  }
+  if (input.recipientId !== undefined) body.recipientId = input.recipientId;
+  return { operation: "send", method: "POST", path: "v2/Nudge/Send", body };
 }
 
-async function createFileBuffer(file: File): Promise<string> {
-  const buffer = await file.arrayBuffer();
-  const uint8Array = new Uint8Array(buffer);
-  if(typeof btoa === "function") {
-    return await new Blob([buffer]).text();
-  } else if (typeof Buffer === "function") {
-    return Buffer.from(uint8Array).toString("base64");
-  } else {
-    throw new Error("No base64 encoding method available.");
-  }
-}
-
-export async function sendNudge(
-  client: SendClientCreationOpts,
-  opts: NudgeSendOpts
-): Promise<NudgeSendResult> {
-  const _mergeTags = opts.mergeTags ?? [];
-  const mergeTags = Array.isArray(_mergeTags) ? _mergeTags : Object.entries(_mergeTags).map(([tagName, tagValue]) => ({ tagName, tagValue }));
-  
-  const emailAttachments = [];
-  
-  if(opts.files?.length) {
-    const filePromises = opts.files.map(file => {
-      return new Promise<{ content: string; mimeType: string; fileName: string; }>((resolve, reject) => {
-        createFileBuffer(file).then(text => resolve({ content: text, mimeType: file.type, fileName: file.name })).catch(reject);
-      })
-    });
-    emailAttachments.push(...(await Promise.all(filePromises)));
-  }
-  
-  const result = await fetch(`${client.baseUrl}/Nudge/Send`, {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      authorization: client.apiKey,
-    },
-    body: JSON.stringify({
-      nudgeId: opts.nudgeId,
-      toEmailAddress: opts.recipient.email,
-      toName: opts.recipient.name,
-      mergeTags,
-      channel: 0,
-      emailCc: opts.options?.cc?.join(","),
-      emailBcc: opts.options?.bcc?.join(","),
-      emailAttachments
-    })
-  });
-  
-  if (!result.ok) {
-    const error = await result.json();
-    return { success: false, error };
-  }
-  const response = await result.json();
-  if (response.error) {
-    return { success: false, error: response.error };
-  }
-  return { success: true };
-}
-
-type SendClientCreationOpts = Omit<ClientCreationOpts, "authCredentials">;
-
-export function createSendClient({
-  baseUrl = "https://app.nudge.net/api/v2",
-  apiKey
-}: SendClientCreationOpts): NudgeSendClient {
-  if(typeof fetch !== "function") {
-    throw new Error("fetch must exist to use nudge.js.");
-  }
-  
-  const client: NudgeSendClient = {
-    send: async (opts: NudgeSendOpts) => {
-      return sendNudge({ baseUrl, apiKey }, opts);
-    }
-  }
-  
-  return client;
+export function readSendResult(body: unknown): SendResult {
+  const id = readString(body, "notificationLogId");
+  return {
+    accepted: true,
+    notificationLogId: id !== null && id.length > 0 ? id : null,
+  };
 }

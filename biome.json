@@ -1,0 +1,16 @@
+{
+  "root": true,
+  "extends": ["@tilli-pro/biome"],
+  "overrides": [
+    {
+      "includes": ["fixtures/**"],
+      "linter": { "enabled": false },
+      "assist": { "enabled": false },
+      "formatter": { "enabled": false }
+    },
+    {
+      "includes": ["__tests__/**"],
+      "linter": { "rules": { "suspicious": { "noExplicitAny": "off" } } }
+    }
+  ]
+}

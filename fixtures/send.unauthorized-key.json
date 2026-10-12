@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/PublicApi/V2/NudgeController.cs:116-120; Nudge.Common/ApiResponse.cs:95-100",
+  "request": { "method": "POST", "path": "v2/Nudge/Send", "body": { "nudgeExternalRef": "fixture-ref", "channel": 0, "toEmailAddress": "recipient-1@example.com", "mergeTags": [{ "tagName": "fixtureTag", "tagValue": "fixture value" }] } },
+  "response": { "status": 401, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "HasErrors": true, "Code": 400, "Error": "API KEY not found or Invalid API KEY" } }
+}

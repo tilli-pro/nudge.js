@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/PublicApi/NotificationStatsController.cs:41-79, :145-158, :223-224; Nudge.Data/DTO/NotificationStatsResponse.cs:7-32",
+  "request": { "method": "POST", "path": "v1/NotificationStats", "body": { "channel": 0, "ianaTimeZoneId": "UTC", "email": "recipient-1@example.com", "fromTime": "2026-10-11T00:00:00", "toTime": "2026-10-11T00:00:00", "top": 10 } },
+  "response": { "status": 200, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "data": { "pageData": [{ "guid": "00000000-0000-4000-8000-000000000001", "recipientId": "fixture-recipient", "toEmail": "recipient-1@example.com", "mobileNumber": null, "scheduledOn": "2026-10-11T09:30:00", "status": 4, "statusText": "Delivered", "failureDescription": null, "nudgeName": "Fixture nudge", "nudgeRunId": null, "clicksCount": 0, "sentOn": "2026-10-11T09:30:02" }, { "guid": "00000000-0000-4000-8000-000000000002", "recipientId": null, "toEmail": "recipient-1@example.com", "mobileNumber": null, "scheduledOn": "2026-10-11T09:31:00", "status": 0, "statusText": "Created", "failureDescription": null, "nudgeName": "Fixture nudge", "nudgeRunId": null, "clicksCount": 0 }], "totalCount": 2, "errors": 0 }, "code": 200, "errCode": 0, "errors": [], "hasErrors": false, "errorGuid": null } }
+}

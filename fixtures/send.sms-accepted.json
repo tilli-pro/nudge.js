@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/PublicApi/V2/NudgeController.cs:300; Nudge.BusinessLayer/RealTimeSmsService.cs:173",
+  "request": { "method": "POST", "path": "v2/Nudge/Send", "body": { "nudgeExternalRef": "fixture-ref", "channel": 1, "toPhoneNumber": "+15550100001", "mergeTags": [{ "tagName": "fixtureTag", "tagValue": "fixture value" }], "idempotencyKey": "00000000-0000-4000-8000-000000000001" } },
+  "response": { "status": 200, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "HasErrors": false, "Code": 200, "NotificationLogId": "00000000-0000-4000-8000-000000000002", "Errors": null, "Statuses": {}, "OtpSessionId": null, "ExpiresAt": null, "NudgeExternalRef": null, "Results": null } }
+}

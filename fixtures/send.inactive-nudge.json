@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.BusinessLayer/RealTimeEmailService.cs:371; Nudge.Common/ApiResponse.cs:109-128",
+  "request": { "method": "POST", "path": "v2/Nudge/Send", "body": { "nudgeExternalRef": "fixture-ref-inactive", "channel": 0, "toEmailAddress": "recipient-1@example.com", "mergeTags": [{ "tagName": "fixtureTag", "tagValue": "fixture value" }] } },
+  "response": { "status": 400, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "HasErrors": true, "Code": 400, "Error": "Nudge is not active" } }
+}
