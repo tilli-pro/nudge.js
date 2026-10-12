@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import * as nudge from "../src/index.js";
 import type {
   CallOptions,
+  FakeNudgeTransport,
+  FakeTemplate,
+  FakeTransportOptions,
   HttpTransportOptions,
   NotificationDetails,
   NotificationLogEntry,
@@ -30,6 +33,9 @@ import type {
 // Compile-time check: each type named here must be exported by src/index.ts.
 export type PublicTypes = [
   CallOptions,
+  FakeNudgeTransport,
+  FakeTemplate,
+  FakeTransportOptions,
   HttpTransportOptions,
   NotificationDetails,
   NotificationLogEntry,
@@ -58,6 +64,7 @@ export type PublicTypes = [
 const RUNTIME_NAMES = [
   "DEFAULT_BASE_URL",
   "NudgeError",
+  "createFakeTransport",
   "createHttpTransport",
   "createNudgeClient",
   "isNudgeError",

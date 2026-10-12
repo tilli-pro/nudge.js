@@ -1,5 +1,6 @@
 export { createNudgeClient } from "./client.js";
 export { isNudgeError, NudgeError } from "./errors.js";
+export { createFakeTransport } from "./fake-transport.js";
 export { createHttpTransport, DEFAULT_BASE_URL } from "./http-transport.js";
 export type {
   NudgeHttpMethod,
@@ -15,6 +16,11 @@ export type {
   NudgeStats,
 } from "./client.js";
 export type { NudgeErrorCode } from "./errors.js";
+export type {
+  FakeNudgeTransport,
+  FakeTemplate,
+  FakeTransportOptions,
+} from "./fake-transport.js";
 export type { HttpTransportOptions } from "./http-transport.js";
 export type {
   NudgeLogChannel,
