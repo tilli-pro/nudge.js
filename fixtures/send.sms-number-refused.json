@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.BusinessLayer/RealTimeSmsService.cs:240-250; Nudge.BusinessLayer/PhoneHelper.cs:428-435",
+  "request": { "method": "POST", "path": "v2/Nudge/Send", "body": { "nudgeExternalRef": "fixture-ref", "channel": 1, "toPhoneNumber": "+1555", "mergeTags": [{ "tagName": "fixtureTag", "tagValue": "fixture value" }] } },
+  "response": { "status": 400, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "HasErrors": true, "Code": 400, "Error": "Invalid phone number: [1555]. Your account is configured for country code +1. Submit a +1 number either in local format (without prefix) or prefixed with 1." } }
+}

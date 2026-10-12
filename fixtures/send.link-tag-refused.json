@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/PublicApi/V2/NudgeController.cs:345-352; Nudge.BusinessLayer/PredefinedMergeTags.cs:376-378",
+  "request": { "method": "POST", "path": "v2/Nudge/Send", "body": { "nudgeExternalRef": "fixture-ref", "channel": 0, "toEmailAddress": "recipient-1@example.com", "mergeTags": [{ "tagName": "fixtureTag", "tagValue": "fixture value" }, { "tagName": "Unsubscribe", "tagValue": "https://example.com/unsubscribe" }] } },
+  "response": { "status": 400, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "HasErrors": true, "Code": 400, "Error": "These merge tags contain links that Nudge generates and cannot accept from a caller: Unsubscribe. Remove them and send again." } }
+}

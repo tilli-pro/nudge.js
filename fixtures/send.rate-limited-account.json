@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/Startup.cs:73-97",
+  "request": { "method": "POST", "path": "v2/Nudge/Send", "body": { "nudgeExternalRef": "fixture-ref", "channel": 0, "toEmailAddress": "recipient-1@example.com", "mergeTags": [{ "tagName": "fixtureTag", "tagValue": "fixture value" }] } },
+  "response": { "status": 429, "headers": {}, "body": null }
+}

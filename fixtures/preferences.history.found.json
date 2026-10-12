@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/PublicApi/CustomerPreferenceController.cs:441-514",
+  "request": { "method": "POST", "path": "v1/CustomerPreference/GetHistory", "body": { "recipientId": "fixture-recipient", "customFields": [] } },
+  "response": { "status": 200, "headers": { "content-type": "application/json; charset=utf-8" }, "body": [{ "preferenceType": "Fixture category", "channel": "Email", "isSubscribed": true, "ipAddress": null, "termsVersion": "1.0", "modifiedBy": "api", "lastModifiedOn": "2026-10-11T09:00:00", "subscribeConfEmailSentTime": null, "unsubscribeReason": null }, { "preferenceType": "Fixture category", "channel": "Email", "isSubscribed": false, "ipAddress": null, "termsVersion": null, "modifiedBy": "api", "lastModifiedOn": "2026-10-10T09:00:00", "subscribeConfEmailSentTime": null, "unsubscribeReason": "fixture reason" }] }
+}

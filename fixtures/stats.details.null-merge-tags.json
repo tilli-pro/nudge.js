@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/PublicApi/NotificationStatsController.cs:788-845; Nudge.Data/DTO/NotificationLogResponse.cs:38-48",
+  "request": { "method": "GET", "path": "v1/NotificationStats/GetNotificationDetails", "query": { "channel": "Email", "notificationLogId": "00000000-0000-4000-8000-000000000001" } },
+  "response": { "status": 200, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "data": { "id": "00000000-0000-4000-8000-000000000001", "recipientId": null, "email": "recipient-1@example.com", "phoneNumber": null, "status": "Delivered", "paymentUrl": null, "customFields": {}, "mergeTags": null }, "code": 200, "errCode": 0, "errors": [], "hasErrors": false, "errorGuid": null } }
+}

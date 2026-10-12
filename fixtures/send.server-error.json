@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/PublicApi/V2/NudgeController.cs:323-328",
+  "request": { "method": "POST", "path": "v2/Nudge/Send", "body": { "nudgeExternalRef": "fixture-ref", "channel": 0, "toEmailAddress": "recipient-1@example.com", "mergeTags": [{ "tagName": "fixtureTag", "tagValue": "fixture value" }] } },
+  "response": { "status": 500, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "HasErrors": true, "Code": 500, "Error": "Internal Error. Please contact with our support" } }
+}

@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/GlobalExceptionFilter.cs:73-80",
+  "request": { "method": "POST", "path": "v2/Nudge/Send", "body": { "nudgeExternalRef": "fixture-ref", "channel": 0, "toEmailAddress": "recipient-1@example.com", "mergeTags": [{ "tagName": "fixtureTag", "tagValue": "fixture value" }] } },
+  "response": { "status": 200, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "code": 500, "errCode": 0, "errors": ["Server error. Please try again later."], "hasErrors": true, "errorGuid": "00000000-0000-4000-8000-000000000001" } }
+}

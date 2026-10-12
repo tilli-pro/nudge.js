@@ -1,0 +1,6 @@
+{
+  "origin": "derived",
+  "source": "Nudge.Api/PublicApi/NotificationStatsController.cs:833-837",
+  "request": { "method": "GET", "path": "v1/NotificationStats/GetNotificationDetails", "query": { "channel": "Email", "notificationLogId": "00000000-0000-4000-8000-000000000001" } },
+  "response": { "status": 400, "headers": { "content-type": "application/json; charset=utf-8" }, "body": { "code": 400, "errCode": 137, "errors": ["Invalid notificationLogId"], "hasErrors": true, "errorGuid": "00000000-0000-4000-8000-000000000002" } }
+}
