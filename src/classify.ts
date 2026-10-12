@@ -64,7 +64,8 @@ function serverMessageOf(body: unknown): string | null {
     errors.length > 0 &&
     errors.every((entry) => typeof entry === "string")
   ) {
-    return errors.join(",");
+    const joined = errors.join(",");
+    if (joined.length > 0) return joined;
   }
   const title = readField(body, "title");
   if (typeof title === "string" && title.length > 0) return title;

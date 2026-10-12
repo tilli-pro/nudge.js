@@ -500,8 +500,24 @@ describe("serverMessage", () => {
     expect(error.serverMessage).toBe("The title");
   });
 
+  it("falls through to the title when errors joins to the empty string", () => {
+    const error = failure(
+      "send",
+      response(400, { errors: [""], title: "Bad Request" }),
+    );
+    expect(error.serverMessage).toBe("Bad Request");
+  });
+
   it("is null when the body says nothing", () => {
-    for (const body of [null, "", {}, [], { Error: "" }, { errors: [] }]) {
+    for (const body of [
+      null,
+      "",
+      {},
+      [],
+      { Error: "" },
+      { errors: [] },
+      { errors: [""] },
+    ]) {
       expect(failure("send", response(400, body)).serverMessage).toBeNull();
     }
   });
