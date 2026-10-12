@@ -358,6 +358,11 @@ describe("createHttpTransport", () => {
       ["a blank key", { apiKey: "   " }],
       ["a missing key", { baseUrl: BASE_URL }],
       ["a numeric key", { apiKey: 42 }],
+      ["a key with an embedded newline", { apiKey: "sk-live-SECRET\nx" }],
+      ["a key with an embedded carriage return", { apiKey: "sk-live\rx" }],
+      ["a key with an embedded NUL", { apiKey: "sk-live\0x" }],
+      ["a key with an embedded space", { apiKey: "sk-live x" }],
+      ["a key with a non-ASCII character", { apiKey: "sk-live-\u4e2d" }],
       ["a relative base URL", { apiKey: API_KEY, baseUrl: "/api" }],
       [
         "a base URL that is not http or https",
@@ -426,10 +431,32 @@ describe("assertConnectionOptions", () => {
     ).not.toThrow();
   });
 
+  it("accepts a key padded with HTTP whitespace", () => {
+    expect(() =>
+      assertConnectionOptions("createNudgeClient", " \tkey\n", undefined),
+    ).not.toThrow();
+  });
+
+  it("does not put the key into the error", () => {
+    const error = thrownBy(() =>
+      assertConnectionOptions(
+        "createNudgeClient",
+        "sk-live-SECRET\nx",
+        undefined,
+      ),
+    );
+    expect(JSON.stringify(error)).not.toContain("SECRET");
+    expect((error as Error).message).not.toContain("SECRET");
+    expect((error as Error).cause).toBeUndefined();
+  });
+
   it.each<[string, unknown, unknown]>([
     ["an undefined key", undefined, undefined],
     ["a numeric key", 42, undefined],
     ["a blank key", " \t ", undefined],
+    ["a key with an embedded newline", "sk-live-SECRET\nx", undefined],
+    ["a key with an embedded NUL", "sk-live\0x", undefined],
+    ["a key with a control character", "sk-live\x7fx", undefined],
     ["a numeric root", API_KEY, 42],
     ["a null root", API_KEY, null],
     ["a relative root", API_KEY, "/api"],

@@ -10,6 +10,12 @@ export const DEFAULT_BASE_URL = "https://app.nudge.net/api";
 
 const TRAILING_SLASHES = /\/+$/;
 
+// The key as a header value: visible ASCII only, with at most HTTP whitespace
+// (tab, LF, CR, space) around it, which a header normalises away. Anything else
+// inside it (CR, LF, NUL, spaces, non-ASCII) makes fetch throw an error that
+// quotes the whole key.
+const HEADER_SAFE_KEY = /^[\t\n\r ]*[\x21-\x7e]+[\t\n\r ]*$/;
+
 export interface HttpTransportOptions {
   readonly apiKey: string;
   readonly baseUrl?: string;
@@ -29,7 +35,11 @@ export function assertConnectionOptions(
   apiKey: unknown,
   baseUrl: unknown,
 ): void {
-  if (typeof apiKey !== "string" || apiKey.trim() === "") {
+  if (
+    typeof apiKey !== "string" ||
+    apiKey.trim() === "" ||
+    !HEADER_SAFE_KEY.test(apiKey)
+  ) {
     throw new NudgeError({ code: "invalid", operation });
   }
   if (baseUrl !== undefined && !isHttpRoot(baseUrl)) {
