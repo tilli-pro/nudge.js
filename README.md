@@ -40,7 +40,7 @@ fails as `invalid`.
 
 `apiKey` is the raw key exactly as Nudge issued it: the transport sends it unchanged as the `authorization`
 header value, which is what Nudge's API accepts. Do not add `Bearer `: a key with an internal space, or any
-character that is not a visible ASCII one, is refused as `invalid`, so
+character inside it that is not a visible ASCII one, is refused as `invalid`, so
 `createNudgeClient({ apiKey: "Bearer abc" })` throws.
 
 Options are checked when the client is created: a bad option throws a `NudgeError` with code `invalid` at once.
